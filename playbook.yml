@@ -3,15 +3,8 @@
   hosts: local
   connection: local
   gather_factors: false
-  vars:
-    keypair: 
-    instance_type: t2.micro
-    image: 
-    region: 
-    count: 1
-    security_group: AnsibleSecurityGroup
-    aws_access_key: 
-    aws_secret_key: 
+  vars_files:
+    - group_vars/env.yml
 
   tasks:
     - name: Create a security group
@@ -46,5 +39,6 @@
         count: "{{ count }}"
         aws_access_key: "{{ aws_access_key }}"
         aws_secret_key: "{{ aws_secret_key }}"
+      register: ec2
 
   
