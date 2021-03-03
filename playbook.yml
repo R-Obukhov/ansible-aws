@@ -1,0 +1,50 @@
+---
+- name: Create AWS instances
+  hosts: local
+  connection: local
+  gather_factors: false
+  vars:
+    keypair: 
+    instance_type: t2.micro
+    image: 
+    region: 
+    count: 1
+    security_group: AnsibleSecurityGroup
+    aws_access_key: 
+    aws_secret_key: 
+
+  tasks:
+    - name: Create a security group
+      ec2_group:
+        name: "{{ security_group }}"
+        description: Servers security group tcp ports open
+        region: "{{ region }}"
+        rules:
+          - proto: tcp
+            from_port: 80
+            to_port: 80
+            cidr_ip: 0.0.0.0/0
+          - proto: tcp
+            from_port: 22
+            to_port: 22
+            cidr_ip: 0.0.0.0/0
+          - proto: tcp
+            from_port: 443
+            to_port: 443
+        aws_access_key: "{{ aws_access_key }}"
+        aws_secret_key: "{{ aws_secret_key }}"
+
+    - name: Create EC2 instance for build
+      ec2:
+        key_name: "{{ keypair }}"
+        instance_type: "{{ instance_type }}"
+        image: "{{ image }}"
+        region: "{{ region }}"
+        group: "{{ security_group }}"
+        instance_tags:
+          name: build
+        count: "{{ count }}"
+        aws_access_key: "{{ aws_access_key }}"
+        aws_secret_key: "{{ aws_secret_key }}"
+
+  
