@@ -2,7 +2,7 @@
 - name: Create AWS instances
   hosts: local
   connection: local
-  gather_factors: false
+
   vars_files:
     - group_vars/env.yml
 
